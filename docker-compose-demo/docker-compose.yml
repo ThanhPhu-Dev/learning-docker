@@ -1,0 +1,24 @@
+version: '3.8'
+# Lệnh | Mô tả
+# docker compose up | Chạy toàn bộ hệ thống (có thể thêm --build nếu có thay đổi)
+# docker compose down | Tắt và xoá toàn bộ container
+# docker compose ps | Xem container đang chạy
+# docker compose logs | Xem log toàn bộ hệ thống
+# docker compose exec <service> bash | Mở bash bên trong container (vd: docker compose exec app bash)
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:6
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:

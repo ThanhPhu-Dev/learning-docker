@@ -1,0 +1,30 @@
+version: '3'
+services:
+  app:
+    build: ./app
+    depends_on:
+      - mongo
+    networks:
+      - app-net
+
+  mongo:
+    image: mongo
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - app-net
+
+volumes:
+  mongo-data:
+
+networks:
+  app-net:
+
+
+# Loại	Mô tả
+# bridge	Mặc định nếu bạn không chỉ định. Các container có thể giao tiếp qua IP hoặc tên.
+# host	Dùng network của host (máy thật). Container dùng chung IP với máy chủ.
+# none	Không kết nối mạng. Thường dùng cho mục đích bảo mật.
+
+# docker network create my-network
+# Có thể dùng --network để gán container vào mạng

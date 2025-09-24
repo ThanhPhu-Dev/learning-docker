@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+  app:
+    build: ./
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:5
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+
+# docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+
+# docker compose --env-file .env.stag -f docker-compose.yml -f docker-compose.stag.yml up --build
+# docker exec -it <container_name> env

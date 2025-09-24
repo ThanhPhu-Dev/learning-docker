@@ -1,0 +1,41 @@
+Docker - Đã học đến Bài 5: Tối ưu Dockerfile (multi-stage build).
+Mai học tiếp: Bài 6
+
+Bài 9:
+
+| Loại           | Đặc điểm chính                               | Dùng khi nào                         |
+| -------------- | -------------------------------------------- | ------------------------------------ |
+| **Volume**     | Docker quản lý, nằm trong `/var/lib/docker`  | Dùng phổ biến trong production       |
+| **Bind mount** | Trỏ thẳng vào 1 thư mục cụ thể trên máy host | Dễ debug, dùng trong phát triển      |
+| **tmpfs**      | RAM only, dữ liệu mất khi container tắt      | Dùng tạm thời, bảo mật (ví dụ token) |
+
+1. Bind Mount (gắn thư mục máy thật)
+    docker run -v $(pwd)/data:/app/data my-image
+Chú thích:
+$(pwd)/data là thư mục trên máy thật
+
+/app/data là thư mục bên trong container
+
+📌 Thích hợp khi dev, vì bạn có thể edit file trên máy thật và thấy thay đổi ngay.
+
+2. Volume (do Docker tạo và quản lý)
+
+    docker volume create my-data
+    docker run -v my-data:/app/data my-image
+Chú thích:
+Dữ liệu nằm trong /var/lib/docker/volumes/my-data/_data
+
+An toàn, tách biệt → dùng trong production
+
+ Bind Mount vs Volume – So sánh nâng cao
+
+ | Tiêu chí                           | **Bind Mount**                           | **Volume**                                          |
+| ---------------------------------- | ---------------------------------------- | --------------------------------------------------- |
+| ✅ **Hiệu suất**                    | Chậm hơn do liên quan I/O máy host       | Nhanh hơn vì Docker quản lý nội bộ                  |
+| 🔄 **Tự động tạo**                 | Không – thư mục phải tồn tại             | Có – Docker tự tạo nếu volume chưa tồn tại          |
+| 🧹 **Tách biệt app**               | Có thể lộ dữ liệu ra ngoài               | An toàn, không lộ ra ngoài nếu không mount thủ công |
+| 🧪 **Dev thuận tiện**              | Có thể chỉnh sửa live code trên máy thật | Không thuận tiện bằng, thường dùng để lưu data      |
+| 📦 **Backup dễ hơn**               | Khó, phải biết path cụ thể               | Dễ, chỉ cần dùng `docker volume` command            |
+| 📜 **Dockerfile & Compose hỗ trợ** | Không rõ ràng                            | Có thể định nghĩa sẵn, dễ dùng lại                  |
+
+
